@@ -55,20 +55,7 @@ static int arraySum(const int* array, const int size) {
     return sum;
 }
 
-/**
- * Initialize a new GameState.
- *
- * The player1 and player2 arrays must both be of size pits.
- *
- * @param pits The number of pits per player
- * @param player1 An array pointer representing the pits of player 1
- * @param player2 An array pointer representing the pits of player 2
- * @param store1 The number of stones in player 1's store
- * @param store2 The number of stones in player 2's store
- * @param ply The current ply number
- * @param currentTurn The player allowed to make the next move (0 or 1)
- * @return A pointer to an initialized GameState structure.
- */
+
 GameState new_GameState(
     const int pits,
     int* player1,
@@ -91,9 +78,6 @@ GameState new_GameState(
     return newState;
 }
 
-/**
- * Free the memory used by a GameState, including the player arrays.
- */
 void GameState_free(GameState state) {
     if (state == NULL) return;
 
@@ -104,14 +88,6 @@ void GameState_free(GameState state) {
     free(state);
 }
 
-/**
- * Start a new game with a certain number of pits, and a
- * certain number of stones per pit.
- *
- * @param pits The number of pits per player
- * @param stonesPerPit The number of stones per pit
- * @return A pointer to an initialized GameState structure.
- */
 GameState GameState_initCustom(const int pits, const int stonesPerPit) {
     if (pits < 1 || stonesPerPit < 1) return NULL;
 
@@ -126,16 +102,10 @@ GameState GameState_initCustom(const int pits, const int stonesPerPit) {
     return new_GameState(pits, player1, player2, 0, 0, 1, 0);
 }
 
-/**
- * Start a new classic game (6 pits per player, 4 stones per pit).
- */
 GameState GameState_initBasic() {
     return GameState_initCustom(6, 4);
 }
 
-/**
- * Returns a pointer to a copy of the given state.
- */
 GameState GameState_copy(GameState state) {
     if (state == NULL) return NULL;
 
@@ -154,10 +124,6 @@ GameState GameState_copy(GameState state) {
         state->currentTurn);
 }
 
-/**
- * Display the game state in a useful manner. Prints a preceding
- * newline if desired.
- */
 void GameState_print(GameState state, const bool newline) {
     if (state == NULL) return;
 
@@ -177,9 +143,6 @@ void GameState_print(GameState state, const bool newline) {
     printf("Turn: %d\n", state->ply);
 }
 
-/**
- * Returns whether the game is in a terminal state.
- */
 bool GameState_isTerminal(GameState state) {
     if (state == NULL) return false;
 
@@ -192,9 +155,6 @@ bool GameState_isTerminal(GameState state) {
     return true;
 }
 
-/**
- * Returns a LinkedList of valid moves for the current player.
- */
 LinkedList GameState_getValidMoves(GameState state) {
     if (state == NULL) return NULL;
 
@@ -214,33 +174,24 @@ LinkedList GameState_getValidMoves(GameState state) {
     return newList;
 }
 
-/**
- * Returns the player allowed to make the next move (0 or 1).
- */
 int GameState_getCurrentTurn(GameState state) {
     if (state == NULL) return -1;
     return state->currentTurn;
 }
 
-/**
- * Returns the current score of a specified player (0 or 1).
- */
 int GameState_getScore(GameState state, const int player) {
     if (state == NULL) return -1;
     return state->stores[player];
 }
 
-/**
- * Apply a move to the current state, given a pit.
- * If the "PIE" rule move is available, the pit input can be -1.
- *
- * Returns a new GameState object with the move applied.
- */
-GameState GameState_move(GameState state, int pit) {
+GameState GameState_move(GameState state, int pit, const bool autoFree) {
     if (state == NULL) return NULL;
 
     // Make a copy of the current state.
     GameState newState = GameState_copy(state);
+
+    // Free the old state, if requested by the user.
+    if (autoFree) GameState_free(state);
 
     // Handle "PIE" input.
     if (pit == -1) {

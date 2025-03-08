@@ -73,19 +73,11 @@ void LinkedList_free(LinkedList list) {
     free(list);
 }
 
-/**
- * Returns the number of nodes in the specified list.
- */
 size_t LinkedList_size(LinkedList list) {
     if (list == NULL) return -1;
     return list->size;
 }
 
-/**
- * Append an element to the specified list.
- *
- * This operation is O(1).
- */
 void LinkedList_append(LinkedList list, const int value) {
     if (list == NULL) return;
 
@@ -100,11 +92,6 @@ void LinkedList_append(LinkedList list, const int value) {
     list->size++;
 }
 
-/**
- * Prepend an element to the specified list.
- *
- * This operation is O(1).
- */
 void LinkedList_prepend(LinkedList list, const int value) {
     if (list == NULL) return;
 
@@ -120,11 +107,6 @@ void LinkedList_prepend(LinkedList list, const int value) {
     list->size++;
 }
 
-/**
- * Get the value at a given index in a list.
- *
- * Note that this operation is O(n), where n is the number of items in the list.
- */
 int LinkedList_get(LinkedList list, const int index) {
     if (list == NULL) return INT_MIN;
     if (index >= list->size || index < 0) return INT_MIN;
@@ -140,17 +122,10 @@ int LinkedList_get(LinkedList list, const int index) {
     return node->value;
 }
 
-/**
- * Get the current head Node of the list.
- */
 Node LinkedList_head(LinkedList list) {
     return list->head;
 }
 
-/**
- * Get the current tail node of the list.
- */
 Node LinkedList_tail(LinkedList list) {
     return list->tail;
 }
-

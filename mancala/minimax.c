@@ -69,19 +69,6 @@ static time_t timespecToMs(const struct timespec ts) {
 }
 
 
-/**
- * Find the optimal move using iterative deepening and minimax / alpha-beta pruning.
- * Starts at depth 2, and increases the depth until time runs out.
- *
- * If time runs out during the search of a given depth, the result found for the
- * previous depth is returned, as it is considered a more complete search.
- *
- * @param state The state to search
- * @param timeLimit The maximum amount of time (in ms) to spend searching
- * @param maxDepth The maximum depth to search before time runs out
- * @param customHeuristic The heuristic function to use. Can be NULL to use the default.
- * @return The optimal move, or a random move if the search failed
- */
 int minimaxIterDep(GameState state, const time_t timeLimit, const int maxDepth, Heuristic customHeuristic) {
     if (state == NULL) return -2;
 
@@ -137,14 +124,6 @@ int minimaxIterDep(GameState state, const time_t timeLimit, const int maxDepth, 
 }
 
 
-/**
- * Find the optimal move using minimax with alpha-beta pruning.
- *
- * @param state The state to search
- * @param maxDepth The maximum depth to search
- * @param customHeuristic The heuristic function to use. Can be NULL to use the default.
- * @return The optimal move, or a random move if the search failed
- */
 int minimaxAlphaBeta(GameState state, const int maxDepth, Heuristic customHeuristic) {
     if (state == NULL) return -2;
 
@@ -210,7 +189,7 @@ static void maxValue(
     LinkedList validMoves = GameState_getValidMoves(state);
 
     for (Node a = LinkedList_head(validMoves); a != NULL; a = Node_next(a)) {
-        GameState newState = GameState_move(state, Node_value(a));
+        GameState newState = GameState_move(state, Node_value(a), false);
         double v2;
         int a2;
 
@@ -290,7 +269,7 @@ static void minValue(
     LinkedList validMoves = GameState_getValidMoves(state);
 
     for (Node a = LinkedList_head(validMoves); a != NULL; a = Node_next(a)) {
-        GameState newState = GameState_move(state, Node_value(a));
+        GameState newState = GameState_move(state, Node_value(a), false);
         double v2;
         int a2;
 
